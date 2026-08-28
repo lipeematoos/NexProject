@@ -1,1 +1,108 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-ink-950: #071019;
+  --color-ink-900: #0b1a27;
+  --color-ink-800: #102637;
+  --color-ink-700: #16324a;
+  --color-ink-600: #1f4260;
+  --color-ink-500: #2c567a;
+
+  --color-petrol-50: #ecfaf7;
+  --color-petrol-100: #d2f3ec;
+  --color-petrol-200: #a7e6da;
+  --color-petrol-300: #72d2c3;
+  --color-petrol-400: #3fb8a8;
+  --color-petrol-500: #17998c;
+  --color-petrol-600: #0e7f75;
+  --color-petrol-700: #0d665f;
+  --color-petrol-800: #0e524d;
+  --color-petrol-900: #0f4441;
+
+  --color-steel-50: #f2f7fb;
+  --color-steel-100: #e3eef6;
+  --color-steel-200: #c3dcec;
+  --color-steel-300: #93c1dc;
+  --color-steel-400: #5b9ec6;
+  --color-steel-500: #3980ad;
+  --color-steel-600: #2a6691;
+  --color-steel-700: #255376;
+  --color-steel-800: #224662;
+  --color-steel-900: #203c53;
+
+  --color-paper: #f3f6f8;
+  --color-card: #ffffff;
+
+  --shadow-soft: 0 1px 2px rgb(11 26 39 / 0.05), 0 8px 24px -12px rgb(11 26 39 / 0.14);
+  --shadow-lift: 0 2px 6px rgb(11 26 39 / 0.06), 0 18px 44px -16px rgb(11 26 39 / 0.22);
+}
+
+html, body, #root { height: 100%; }
+body {
+  background: var(--color-paper);
+  color: #1c2b38;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.dark body { background: #0a141d; color: #dbe6ee; }
+
+::selection { background: #17998c33; }
+
+/* scrollbars */
+* { scrollbar-width: thin; scrollbar-color: #94a9ba66 transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: #94a9ba55; border-radius: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slidein-r { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes pulsedot { 0%,100% { box-shadow: 0 0 0 0 rgb(23 153 140 / .45);} 60% { box-shadow: 0 0 0 7px rgb(23 153 140 / 0);} }
+@keyframes scan { 0% { transform: translateY(-110%);} 100% { transform: translateY(340%);} }
+@keyframes dash { to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%,100% { opacity: 1;} 50% { opacity: .25;} }
+
+.anim-rise { animation: rise .45s cubic-bezier(.22,.8,.36,1) both; }
+.anim-fade { animation: fadein .3s ease both; }
+.anim-slide-r { animation: slidein-r .35s cubic-bezier(.22,.8,.36,1) both; }
+.live-dot::before { content:""; display:inline-block; width:8px; height:8px; border-radius:9999px; background:#17998c; margin-right:8px; animation: pulsedot 2s infinite; }
+.chart-draw { stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: dash 1.4s ease-out forwards; }
+
+.stagger > * { animation: rise .5s cubic-bezier(.22,.8,.36,1) both; }
+.stagger > *:nth-child(1){animation-delay:.02s} .stagger > *:nth-child(2){animation-delay:.06s}
+.stagger > *:nth-child(3){animation-delay:.10s} .stagger > *:nth-child(4){animation-delay:.14s}
+.stagger > *:nth-child(5){animation-delay:.18s} .stagger > *:nth-child(6){animation-delay:.22s}
+.stagger > *:nth-child(7){animation-delay:.26s} .stagger > *:nth-child(8){animation-delay:.30s}
+.stagger > *:nth-child(9){animation-delay:.34s} .stagger > *:nth-child(10){animation-delay:.38s}
+.stagger > *:nth-child(n+11){animation-delay:.42s}
+
+/* dotted map texture for dark panels */
+.grid-tex {
+  background-image:
+    linear-gradient(rgba(122,168,199,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,168,199,.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.scanline { position: relative; overflow: hidden; }
+.scanline::after {
+  content:""; position:absolute; inset:0; height:34%;
+  background: linear-gradient(180deg, transparent, rgba(63,184,168,.09), transparent);
+  animation: scan 5.5s linear infinite; pointer-events:none;
+}
+
+/* print: only the print sheet */
+.print-sheet { display: none; }
+@media print {
+  body { background: #fff !important; }
+  #root { display: none !important; }
+  .print-sheet { display: block !important; color: #111; font-size: 12px; }
+  .print-sheet h1 { font-size: 22px; } .print-sheet h2 { font-size: 15px; margin-top: 14px; }
+  .print-sheet table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .print-sheet th, .print-sheet td { border: 1px solid #cbd5e1; padding: 5px 8px; text-align: left; }
+}
